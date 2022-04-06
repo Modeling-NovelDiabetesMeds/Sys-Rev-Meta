@@ -1,0 +1,15 @@
+
+Meta-regression coefficients for primary outcomes, by drug class
+=======================================================================
+               Outcome               Class  Slope  CI.lb  CI.ub P-value
+-----------------------------------------------------------------------
+1     Cardiovascular Mortality      GLP-1RA 0.783  -3.518 5.083  0.721 
+2               MACE                GLP-1RA 0.961  -3.496 5.418  0.673 
+3 Hospitalisation for Heart Failure GLP-1RA 1.299  -2.514 5.112  0.504 
+4      Composite Renal Outcome      GLP-1RA -0.943 -7.44  5.554  0.776 
+5     Cardiovascular Mortality      SGLT2i  0.481  -0.048 1.01   0.075 
+6               MACE                SGLT2i  1.879  -0.11  3.868  0.064 
+7 Hospitalisation for Heart Failure SGLT2i   1.44  1.034  1.845    0   
+8      Composite Renal Outcome      SGLT2i   0.23  -0.524 0.985  0.55  
+-----------------------------------------------------------------------
+Log hazard ratio (DV) and baseline cardiovascular risk (IV)            
