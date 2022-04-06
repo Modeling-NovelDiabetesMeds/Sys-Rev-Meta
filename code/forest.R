@@ -12,6 +12,9 @@ library(metafor)
 library(meta)
 # Set working directory
   wd <- "~/Documents/_meta"
+  
+  # comment
+  
   setwd(wd)
 
 # A: Meta analysis and forest plots for log hazard ratios
