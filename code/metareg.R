@@ -7,27 +7,25 @@
 #             errors for ARD point estimate after using bootstrapping
 #         #        #         #        #         #        #         #          #
 
+# preamble, wd and load data ----
+    library(data.table)
+    library(tidyr)
+    library(dplyr)
+    library(scales)
+    library(stringr)
+    library(metafor)
+    library(meta)
+    library(grid)
+    library(lme4)
+    library(stargazer)
 
-library(data.table)
-library(tidyr)
-library(dplyr)
-library(scales)
-library(stringr)
-library(metafor)
-library(meta)
-library(grid)
-library(lme4)
-set.seed(10029)
+    set.seed(10029)
+    wd <- "~/Documents/Sys-Rev-Meta"
+    setwd(wd)
+    
+    meta <- fread("data/df.csv")
 
-# Set working directory
-
-  wd <- "~/Documents/_meta"
-  setwd(wd)
-
-# Load data 
-meta <- fread("df.csv")
-
-# A.   Some data prep (labels and ids for plots) -----
+# A.   Data preparation (labels and ids for plots) -----
 # generate id per trial/group for regression plots
       meta <- meta %>% 
         group_by(type, outcome) %>%
@@ -39,8 +37,6 @@ meta <- fread("df.csv")
 # Outcome labels, used for later in plot
         
         meta$outcomelab <- meta$outcomen
-        meta$outcomelab <- ifelse(meta$outcomen == "allcauseMort", 
-                                  "All-cause Mortality", meta$outcomelab )
         meta$outcomelab <- ifelse(meta$outcomen == "CVMort", 
                                   "Cardiovascular Mortality", meta$outcomelab )
         meta$outcomelab <- ifelse(meta$outcomen == "HospHF",
@@ -50,6 +46,8 @@ meta <- fread("df.csv")
                                   "Composite Renal Outcome", meta$outcomelab )
         meta$outcomelab <- ifelse(meta$outcomen == "MACE", 
                                   "MACE", meta$outcomelab )
+        meta$outcomelab <- ifelse(meta$outcomen == "allcauseMort", 
+                                  "All-cause Mortality", meta$outcomelab )
         meta$outcomelab <- ifelse(meta$outcomen == "MI", 
                                   "Myocardial Infarction", meta$outcomelab )
         meta$outcomelab <- ifelse(meta$outcomen == "stroke", 
@@ -71,11 +69,12 @@ meta <- fread("df.csv")
                                cvdepy))
 
 # Hazard Ratios: log, variance and standard errors
-meta$loghr  <- log(meta$hr)
-meta$logvi  <- ((log(meta$uci) - log(meta$lci)) / (2 * qnorm(.975) ))^2
-meta$logsei <- sqrt(meta$logvi)
-meta$vi     <- (exp(meta$logvi)-1)*exp(2*meta$loghr + meta$logvi) # log normal variance
-meta$sei    <- sqrt(meta$vi)
+  
+  meta$loghr  <- log(meta$hr)
+  meta$logvi  <- ((log(meta$uci) - log(meta$lci)) / (2 * qnorm(.975) ))^2
+  meta$logsei <- sqrt(meta$logvi)
+  meta$vi     <- (exp(meta$logvi)-1)*exp(2*meta$loghr + meta$logvi) # log normal variance
+  meta$sei    <- sqrt(meta$vi)
 
 # Average risk difference (point estimates)
     # 5 year projection
@@ -104,12 +103,15 @@ meta$sei    <- sqrt(meta$vi)
     # List to store results
     lse <- list()
     # Vector of outcomes interest
-    v.outcomes <- c("CVMort", "MACE","HospHF", 
-                    "sustGFRdecl", "allcauseMort", "MI", "stroke") 
-S <- 100000
+    v.outcomes <- c("Cardiovascular Mortality", "MACE",
+                    "Hospitalisation for Heart Failure", 
+                    "Composite Renal Outcome", "All-cause Mortality", 
+                    "Myocardial Infarction", "Stroke") 
+    # Number of simulations S
+    S <- 100000
 # Run simulation exercise for each outcome
       for(j in 1:length(v.outcomes)){
-        m0 <- subset(meta, subset = (outcomen == v.outcomes[j]))
+        m0 <- subset(meta, subset = (outcomelab == v.outcomes[j]))
         # Generate variance for ARD
         # Simulate a data frame vectors size S for p.rate and Ty = 5 years to get a 
         # simulated vector of arr and compute its variance
@@ -161,63 +163,59 @@ S <- 100000
         }
         
         se$ardvi <- se$ardse^2
-        #se$ardvi.22 <- se$ardse2^2
-        #se$ardvi.2 <- se$ardvi.22 
         se$ardvi.2  <- se$ardse2^2
-        #se$ardvi.2 <- ifelse(is.na(se$ardvi.22) == T, mean(se$ardvi.22, na.rm = T), se$ardvi.22)
-        se$outcomen <- v.outcomes[j]
+        se$outcomelab <- v.outcomes[j]
         lse[[j]] <- se
       }
 # Merge variances back to main dataframe
 # Dataframe of ard variances per trial/outcome
     mse  <- rbind(lse[[1]],lse[[2]],lse[[3]], lse[[4]], lse[[5]], lse[[6]], lse[[7]])
     # merge into main dataframe: 
-    meta <- merge(meta, mse, by = c("trialname", "outcomen"), 
+    meta <- merge(meta, mse, by = c("trialname", "outcomelab"), 
                   all.x = TRUE, 
                   all.y= TRUE)
-    arddf <- meta[, c("trialname","type", "outcomen", "ard", "ardse",
+    arddf <- meta[, c("trialname","type", "outcomelab", "ard", "ardse",
                       "ardse2", "ardvi", "ardvi.2")]
 # Export ardse.csv dataframe (used in forest plots)  
-      write.csv(arddf, "ardse.csv")
+      write.csv(arddf, "data/ardse.csv")
 
 # Wsize/ Wsize2: Parameter used for bubble sizes, function proportional of variances
-meta <- meta %>%
-  group_by(outcome) %>%
-  mutate(ran = range(1/(10000*ardvi.2), na.rm = T)[2] -
+     meta <- meta %>%
+        group_by(outcome) %>%
+        mutate(ran = range(1/(10000*ardvi.2), na.rm = T)[2] -
                range(1/(10000*ardvi.2), na.rm = T)[1])
     meta$wsize   <- 1/(100*meta$ardvi.2)/meta$ran
     meta$wsize2  <- 8*log(1+meta$wsize^(1/3) ) 
 
-# I.   Meta regression: Models with cvdepy as mediator: -----
-meta$lograte <- log(meta$cvdepy) 
+# I.1  Meta regression: Models with cvdepy as mediator: -----
+  meta$lograte <- log(meta$cvdepy) 
 #  7 outcomes, model by drugclass
   # lists to store models
     mod.glp1  <- list() 
     mod.sglt2 <- list()
     v.type <- c("GLP1","SGLT2")
-    v.outcomes <- c("CVMort", "MACE","HospHF",  "sustGFRdecl", "allcauseMort", "MI", "stroke") 
-    
-for(o in 1:length(v.outcomes)){
+
+for(o in 1:length(v.outcomes)){ #loop runs over each outcome 'o' and each drug class 't'
   
-  for(t in 1:2){
-    df.0 <- subset(meta, subset = (outcomen == v.outcomes[o] &
+  for(t in 1:length(v.type)){
+    df.0 <- subset(meta, subset = (outcomelab == v.outcomes[o] &
                                    type == v.type[t]))
-  if(v.outcomes[o] == "HospHF"){
+  
+  if(v.outcomes[o] == "HospHF"){ #leave out two trials with inconsistent definition for HospHF
     df <- subset(df.0, 
                  subset = (trialname != "SOLOIST-WHF" & trialname != "SCORED") 
                  )
   } else {
     df <- df.0
   }
-# Model  
-  
+
+  # Model (random effects) for outcome o class t
   r <- rma(100*ard, (100^2)*ardvi.2, # times 100 to re-scale to percentage points
            mods = ~ cvdepy, 
            data = df, 
            method="REML", 
            slab = trialname)
-  
-  if( t == 1){ #Store in corresponding type-list
+  if( t == 1){ #Store in corresponding type-list (GLP1-RA/SGLT2i)
     mod.glp1[[o]]  <- r
     } else {
     mod.sglt2[[o]] <- r
@@ -225,15 +223,13 @@ for(o in 1:length(v.outcomes)){
   }
   }
 
-# summary to recover quantities of interest (coefficient and pvalue)
-s.s <- lapply(mod.sglt2, summary)
-s.g <- lapply(mod.glp1, summary)
+  # summary to recover quantities of interest (coefficient and pvalue)
+    s.s <- lapply(mod.sglt2, summary)
+    s.g <- lapply(mod.glp1, summary)
 #primary outcomes
-    v.labs <- c("Cardiovascular Mortality", "MACE", 
-            "Hospitalisation for Heart Failure","Composite Renal Outcome")
 
     # empty data frame to store
-    cc <- as.data.frame(cbind(rep(v.labs,2), 
+    cc <- as.data.frame(cbind(rep(v.outcomes[1:4],2), 
                           c(rep("GLP-1RA",4), 
                             rep("SGLT2i",4)), 
                           rep(NA,8), 
@@ -241,8 +237,7 @@ s.g <- lapply(mod.glp1, summary)
                           rep(NA,8),
                           rep(NA,8)))
 # secondary outcomes
-    v.labs.2 <- c(  "All-cause Mortality", "Myocardial Infarction", "Stroke")
-    cc.2 <- as.data.frame(cbind(rep(v.labs.2,2), 
+    cc.2 <- as.data.frame(cbind(rep(v.outcomes[5:7],2), 
                               c(rep("GLP-1RA",3), 
                                 rep("SGLT2i",3)), 
                               rep(NA,6), 
@@ -252,48 +247,48 @@ s.g <- lapply(mod.glp1, summary)
 names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
 names(cc.2) <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
 
-    # store them from summary objects
-for(i in 1:4){
-  cc[i,3] <- round(s.g[[i]]$beta[2],3)
-  cc[i,4] <- round(s.g[[i]]$ci.lb[2],3)
-  cc[i,5] <- round(s.g[[i]]$ci.ub[2],3)
-  cc[i,6] <- round(s.g[[i]]$pval[2],3)
-  cc[i+4,3] <- round(s.s[[i]]$beta[2],3)
-  cc[i+4,4] <- round(s.s[[i]]$ci.lb[2],3)
-  cc[i+4,5] <- round(s.s[[i]]$ci.ub[2],3)
-  cc[i+4,6] <- round(s.s[[i]]$pval[2],3)
-}
-# Secondary outcomes
-for(i in 5:7){
-  cc.2[i-4,3] <- round(s.g[[i]]$beta[2],3)
-  cc.2[i-4,4] <- round(s.g[[i]]$ci.lb[2],3)
-  cc.2[i-4,5] <- round(s.g[[i]]$ci.ub[2],3)
-  cc.2[i-4,6] <- round(s.g[[i]]$pval[2],3)
-  cc.2[i-1,3] <- round(s.s[[i]]$beta[2],3)
-  cc.2[i-1,4] <- round(s.s[[i]]$ci.lb[2],3)
-  cc.2[i-1,5] <- round(s.s[[i]]$ci.ub[2],3)
-  cc.2[i-1,6] <- round(s.s[[i]]$pval[2],3)
-}
-stargazer(cc, out = "metareg_primary.txt",
-          summary = F,type = "text", 
-          title = "Meta-regression coefficients for primary outcomes, by drug class",
-          notes = "Log hazard ratio (DV) and baseline cardiovascular risk (IV)")
-stargazer(cc.2, out = "metareg_secondary.txt",
-          summary = F,type = "text", 
-          title = "Meta-regression coefficients for primary outcomes, by drug class",
-          notes = "Log hazard ratio (DV) and baseline cardiovascular risk (IV)")
-
-
-
-# II   Meta regression: Figure ------
+    # extract quantities of interest summary lists
+      # Primary outcomes
+      for(i in 1:4){
+        cc[i,3] <- round(s.g[[i]]$beta[2],3)
+        cc[i,4] <- round(s.g[[i]]$ci.lb[2],3)
+        cc[i,5] <- round(s.g[[i]]$ci.ub[2],3)
+        cc[i,6] <- round(s.g[[i]]$pval[2],3)
+        cc[i+4,3] <- round(s.s[[i]]$beta[2],3)
+        cc[i+4,4] <- round(s.s[[i]]$ci.lb[2],3)
+        cc[i+4,5] <- round(s.s[[i]]$ci.ub[2],3)
+        cc[i+4,6] <- round(s.s[[i]]$pval[2],3)
+        }
+      # Secondary outcomes
+      for(i in 5:7){
+        cc.2[i-4,3] <- round(s.g[[i]]$beta[2],3)
+        cc.2[i-4,4] <- round(s.g[[i]]$ci.lb[2],3)
+        cc.2[i-4,5] <- round(s.g[[i]]$ci.ub[2],3)
+        cc.2[i-4,6] <- round(s.g[[i]]$pval[2],3)
+        cc.2[i-1,3] <- round(s.s[[i]]$beta[2],3)
+        cc.2[i-1,4] <- round(s.s[[i]]$ci.lb[2],3)
+        cc.2[i-1,5] <- round(s.s[[i]]$ci.ub[2],3)
+        cc.2[i-1,6] <- round(s.s[[i]]$pval[2],3)
+      }
+  # Export into text tables
+    stargazer(cc, out = "output/metareg_primary.txt",
+              summary = F,type = "text", 
+              title = "Meta-regression coefficients for primary outcomes, by drug class",
+              notes = "Log hazard ratio (DV) and baseline cardiovascular risk (IV)")
+    stargazer(cc.2, out = "output/metareg_secondary.txt",
+              summary = F,type = "text", 
+              title = "Meta-regression coefficients for primary outcomes, by drug class",
+              notes = "Log hazard ratio (DV) and baseline cardiovascular risk (IV)")
+    
+# I.2  Meta regression: Figure ------
     # Colors by drug class 
     meta$border <- ifelse(meta$type == "SGLT2", 
                        "darkslategray3", 
                        "indianred3")
-    meta$colnum2 <- ifelse(meta$type == "SGLT2", 
+    meta$colnum <- ifelse(meta$type == "SGLT2", 
                            "darkslategray3", 
                            "transparent")
-    meta$colnum2 <- ifelse(meta$type == "SGLT2", alpha(meta$colnum2,alpha = 0.4),
+    meta$colnum2 <- ifelse(meta$type == "SGLT2", alpha(meta$colnum,alpha = 0.4),
                            "transparent")
   # A list to store data frames per outcome, to run plot over a loop.
     # Data frames contain data points for bubbles (x = cvdepy, y = ard, weight)
@@ -315,7 +310,7 @@ stargazer(cc.2, out = "metareg_secondary.txt",
 
 
 
-  png("plots/metareg_ard_panel.png", width = 9, height = 9, units = 'in', res = 300)  
+  #png("plots/metareg_ard_panel.png", width = 9, height = 9, units = 'in', res = 300)  
   par(oma = c(5,3,1,1), mfrow = c(2,2), mar = c(4,4,3,2)*0.75)
   for(i in 1:4){
     # Plot elements: 1. white canvas, 2. confint (sglt2 + glp1) + 
@@ -427,19 +422,12 @@ stargazer(cc.2, out = "metareg_secondary.txt",
     print("hi")
   }
 }
-  dev.off()  
+  #dev.off()  
 
 
-# XXX. Meta regression: Figure for secondary outcomes
-  meta$border <- ifelse(meta$type == "SGLT2", 
-                        "darkslategray3", 
-                        "indianred3")
-  meta$colnum2 <- ifelse(meta$type == "SGLT2", 
-                         "darkslategray3", 
-                         "transparent")
-  meta$colnum2 <- ifelse(meta$type == "SGLT2", alpha(meta$colnum2,alpha = 0.4),
-                         "transparent")
-  # A list to store data frames per outcome, to run plot over a loop.
+# I.3  Meta regression: Figure for secondary outcomes -----
+
+  # A list to store data frames per secondary outcome, to run plot over a loop.
   # Data frames contain data points for bubbles (x = cvdepy, y = ard, weight)
   l.do.2 <- list()
   # 1. Df for each outcome, 
@@ -448,16 +436,11 @@ stargazer(cc.2, out = "metareg_secondary.txt",
   l.do.2[[3]]  <- meta[meta$outcomen == "stroke",]
 
   # Object to title subplots
-  v.titles <- c("All-cause Mortality",
-                "Myocardial Infarction", 
-                "Stroke"
-                )
+  v.titles <- v.outcomes[5:7]
   
-  
-  
-  png("plots/metareg_ard_panel_secondary.png", width = 15, height = 5, units = 'in', res = 300)  
+  # png("plots/metareg_ard_panel_secondary.png", width = 15, height = 5, units = 'in', res = 300)  
   par(oma = c(3,2,0,0), mfrow = c(1,3), mar = c(4,4,3,2)*0.5)
-  for(i in 5:7){
+    for(i in 5:7){
     # Plot elements: 1. white canvas, 2. confint (sglt2 + glp1) + 
     #                3. bubbles 4. Model fit (line) 5. Trial number (text)
     #                6. titles (outcome)
@@ -567,7 +550,7 @@ stargazer(cc.2, out = "metareg_secondary.txt",
       print("hi")
     }
   }
-  dev.off() 
+  #dev.off() 
 # S.1  Sensitivity Analysis CVD: Remove SCORE and SOLOIST --------
 df.sens  <- meta[meta$outcomen == "CVMort" & 
                      !(meta$trialname == "SOLOIST-WHF" |
@@ -584,7 +567,7 @@ msens.s <- rma(100*ard, (100^2)*ardvi.2,
                  method="REML", 
                  slab = trialname)
 
-png("plots/metareg_ard_cdv_1.png", width = 6, height = 6, units = 'in', res = 300)  
+#png("plots/metareg_ard_cdv_1.png", width = 6, height = 6, units = 'in', res = 300)  
   par(oma = c(3,2,1,1), mfrow = c(1,1), mar = c(4,4,3,2)*0.75)
     # 1. White canvas 
     plot(x = 0, y = 0, type ='n', 
@@ -676,7 +659,7 @@ png("plots/metareg_ard_cdv_1.png", width = 6, height = 6, units = 'in', res = 30
                    col = c("indianred3", "darkslategray3" ), 
                    box.col = "transparent")
    
-        dev.off()  
+      #  dev.off()  
 
 # S.2  Sensitivity Analysis CVD: Remove ELIXA and SOLOIST --------
   df.sens  <- meta[meta$outcomen == "CVMort" & 
@@ -694,7 +677,7 @@ png("plots/metareg_ard_cdv_1.png", width = 6, height = 6, units = 'in', res = 30
                   method="REML", 
                   slab = trialname)
   
-  png("plots/metareg_ard_cdv_2.png", width = 6, height = 6, units = 'in', res = 300)  
+#  png("plots/metareg_ard_cdv_2.png", width = 6, height = 6, units = 'in', res = 300)  
   par(oma = c(3,2,1,1), mfrow = c(1,1), mar = c(4,4,3,2)*0.75)
   # 1. White canvas 
   plot(x = 0, y = 0, type ='n', 
@@ -786,7 +769,7 @@ png("plots/metareg_ard_cdv_1.png", width = 6, height = 6, units = 'in', res = 30
          col = c("indianred3", "darkslategray3" ), 
          box.col = "transparent")
   
-  dev.off()              
+#  dev.off()              
         
 # S.3  Sensitivity Analysis Renal: Remove ELIXA and CREDENCE --------
   df.sens  <- meta[meta$outcomen == "sustGFRdecl" & 
@@ -807,12 +790,12 @@ png("plots/metareg_ard_cdv_1.png", width = 6, height = 6, units = 'in', res = 30
                 method="REML", 
                 slab = trialname)
   
-  png("plots/metareg_ard_ren.png", width = 6, height = 6, units = 'in', res = 300)  
+#  png("plots/metareg_ard_ren.png", width = 6, height = 6, units = 'in', res = 300)  
     par(oma = c(3,2,1,1), mfrow = c(1,1), mar = c(4,4,3,2)*0.75)
     # 1. White canvas 
     plot(x = 0, y = 0, type ='n', 
          xlim = range(meta$cvdepy, na.rm = T), 
-        ylim = c(-3.93,14), , 
+        ylim = c(-3.93,14),  
          xlab= "", 
          ylab ="", 
          axes = F)
@@ -900,8 +883,10 @@ png("plots/metareg_ard_cdv_1.png", width = 6, height = 6, units = 'in', res = 30
            col = c("indianred3", "darkslategray3" ), 
            box.col = "transparent")
     
-    dev.off()  
+#    dev.off()  
         
+  
     
+#                     End of script               #       
     
     
