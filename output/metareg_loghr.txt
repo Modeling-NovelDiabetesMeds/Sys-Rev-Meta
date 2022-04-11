@@ -1,0 +1,21 @@
+
+Meta-regression coefficients for log HR and baseline cv incidence rate
+===========================================================================
+              Outcome        Class     Slope     CI.lb     CI.ub   P-value 
+---------------------------------------------------------------------------
+1           allcauseMort     GLP1     -0.068    -0.366     0.229    0.653  
+2              CVMort        GLP1     -0.047    -0.422     0.329    0.807  
+3               MACE         GLP1      0.043    -0.307     0.393    0.810  
+4                MI          GLP1     -0.159    -0.580     0.262    0.458  
+5              stroke        GLP1      0.263    -0.229     0.755    0.295  
+6         HospHeartFailure   GLP1     -0.155    -0.586     0.276    0.481  
+7           sustGFRdecl      GLP1      0.432    -0.367     1.231    0.289  
+8           allcauseMort    SGLT2i    -0.004    -0.100     0.092    0.931  
+9              CVMort       SGLT2i    -0.021    -0.115     0.073    0.662  
+10              MACE        SGLT2i    -0.080    -0.203     0.044    0.206  
+11               MI         SGLT2i    -0.051    -0.287     0.184    0.668  
+12             stroke       SGLT2i    -0.100    -0.471     0.272    0.599  
+13        HospHeartFailure  SGLT2i    -0.006    -0.080     0.068    0.871  
+14          sustGFRdecl     SGLT2i     0.121    -0.047     0.288    0.158  
+---------------------------------------------------------------------------
+Log hazard ratio (DV) and baseline cardiovascular incidence rate (IV)      

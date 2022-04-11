@@ -271,14 +271,14 @@ names(cc.2) <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
         cc.2[i-1,6] <- round(s.s[[i]]$pval[2],3)
       }
   # Export into text tables
-    stargazer(cc, out = "output/metareg_primary.txt",
+    stargazer(cc, out = "output/metareg_ard_primary.txt",
               summary = F,type = "text", 
               title = "Meta-regression coefficients for primary outcomes, by drug class",
-              notes = "Log hazard ratio (DV) and baseline cardiovascular risk (IV)")
-    stargazer(cc.2, out = "output/metareg_secondary.txt",
+              notes = "Absolute risk difference (DV) and baseline cardiovascular risk (IV)")
+    stargazer(cc.2, out = "output/metareg_ard_secondary.txt",
               summary = F,type = "text", 
               title = "Meta-regression coefficients for secondary outcomes, by drug class",
-              notes = "Log hazard ratio (DV) and baseline cardiovascular risk (IV)")
+              notes = "Absolute risk difference (DV) and baseline cardiovascular risk (IV)")
     
 # I.2  Meta regression: Figure ------
     # Colors by drug class 
