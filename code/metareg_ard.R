@@ -23,7 +23,7 @@
     wd <- "~/Documents/Sys-Rev-Meta"
     setwd(wd)
     
-    meta <- fread("data/df.csv")
+    meta <- read.csv("data/df.csv")
 
 # A.   Data preparation (labels and ids for plots) -----
 # generate id per trial/group for regression plots
@@ -277,7 +277,7 @@ names(cc.2) <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
               notes = "Log hazard ratio (DV) and baseline cardiovascular risk (IV)")
     stargazer(cc.2, out = "output/metareg_secondary.txt",
               summary = F,type = "text", 
-              title = "Meta-regression coefficients for primary outcomes, by drug class",
+              title = "Meta-regression coefficients for secondary outcomes, by drug class",
               notes = "Log hazard ratio (DV) and baseline cardiovascular risk (IV)")
     
 # I.2  Meta regression: Figure ------

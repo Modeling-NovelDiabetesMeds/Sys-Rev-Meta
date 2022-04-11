@@ -1,5 +1,5 @@
 
-Meta-regression coefficients for primary outcomes, by drug class
+Meta-regression coefficients for secondary outcomes, by drug class
 =================================================================
               Outcome         Class  Slope  CI.lb  CI.ub  P-value
 -----------------------------------------------------------------
