@@ -54,14 +54,14 @@
                                   "Stroke", meta$outcomelab )
 
 # B.   Computing variables of interest (loghr)       ----
-# Create CVD baseline incidence rate variable (events per 100 patient year)
+# Create CVD baseline rate variable (events per 100 patient year)
 #       cvdepy: cardiovascular death events pero 100 patient-years
-#       from p.rate (placebo group incidence rate per outcome)  
+#       from p.rate (placebo group rate per outcome)  
     meta$cvdepy <- NA
     meta$cvdepy <- ifelse(meta$outcomen == "CVMort", 
                           meta$p.rate, 
                           meta$cvdepy)
-  # spread value of cardiovascular incidence rate to all outcomes
+  # spread value of cardiovascular rate to all outcomes
       meta <- meta%>%
         group_by(trialname) %>% 
         mutate(cvdepy = ifelse(is.na(cvdepy), 
@@ -274,11 +274,11 @@ names(cc.2) <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
     stargazer(cc, out = "output/metareg_ard_primary.txt",
               summary = F,type = "text", 
               title = "Meta-regression coefficients for primary outcomes, by drug class",
-              notes = "Absolute risk difference (DV) and baseline cardiovascular risk (IV)")
+              notes = "Absolute risk difference and baseline cardiovascular risk")
     stargazer(cc.2, out = "output/metareg_ard_secondary.txt",
               summary = F,type = "text", 
               title = "Meta-regression coefficients for secondary outcomes, by drug class",
-              notes = "Absolute risk difference (DV) and baseline cardiovascular risk (IV)")
+              notes = "Absolute risk difference and baseline cardiovascular risk")
     
 # I.2  Meta regression: Figure ------
     # Colors by drug class 

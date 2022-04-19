@@ -197,7 +197,7 @@ for( i in 1:length(v.outcome)){
  stargazer(coeftab, out = "output/metareg_loghr.txt",
           summary = F,type = "text", 
           title = "Meta-regression coefficients for log HR and baseline cv incidence rate",
-          notes = "Log hazard ratio (DV) and baseline cardiovascular incidence rate (IV)")
+          notes = "Log hazard ratio and baseline cardiovascular rate")
 
 
 

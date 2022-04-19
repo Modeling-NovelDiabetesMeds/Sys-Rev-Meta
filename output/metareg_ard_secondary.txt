@@ -1,13 +1,13 @@
 
 Meta-regression coefficients for secondary outcomes, by drug class
-=========================================================================
-                Outcome         Class    Slope    CI.lb    CI.ub  P-value
--------------------------------------------------------------------------
-1         All-cause Mortality  GLP-1RA   0.125    -4.379   4.63    0.957 
-2        Myocardial Infarction GLP-1RA    1.35    -3.309   6.008   0.57  
-3               Stroke         GLP-1RA   -0.771   -4.678   3.136   0.699 
-4         All-cause Mortality   SGLT2i   0.387    -0.082   0.856   0.106 
-5        Myocardial Infarction  SGLT2i   -0.151   -2.779   2.478   0.91  
-6               Stroke          SGLT2i   -0.078   -2.905   2.748   0.957 
--------------------------------------------------------------------------
-Absolute risk difference (DV) and baseline cardiovascular risk (IV)      
+===============================================================
+             Outcome         Class  Slope  CI.lb  CI.ub P-value
+---------------------------------------------------------------
+1      All-cause Mortality  GLP-1RA 0.125  -4.379 4.63   0.957 
+2     Myocardial Infarction GLP-1RA  1.35  -3.309 6.008  0.57  
+3            Stroke         GLP-1RA -0.771 -4.678 3.136  0.699 
+4      All-cause Mortality  SGLT2i  0.387  -0.082 0.856  0.106 
+5     Myocardial Infarction SGLT2i  -0.151 -2.779 2.478  0.91  
+6            Stroke         SGLT2i  -0.078 -2.905 2.748  0.957 
+---------------------------------------------------------------
+Absolute risk difference and baseline cardiovascular risk      
