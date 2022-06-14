@@ -11,39 +11,42 @@ library(stringr)
 library(metafor)
 library(meta)
 # Set working directory
-wd <- "~/Documents/_meta"
+wd <- "~/Documents/Sys-Rev-Meta"
 
-# comment
 
 setwd(wd)
 
 # Load data 
-df.ard <- read.csv("ardse.csv")
+df.ard <- read.csv("data/ardse.csv")
 # Labels for titles
-df.ard$outcomen <- ifelse(df.ard$outcomen == "allcauseMort", "All-cause Mortality",
-                          df.ard$outcomen)
-df.ard$outcomen <- ifelse(df.ard$outcomen == "CVMort", "Cardiovascular Mortality",
-                          df.ard$outcomen)
-df.ard$outcomen <- ifelse(df.ard$outcomen == "HospHF", "Hospitalisation for Heart Failure",
-                          df.ard$outcomen)
-df.ard$outcomen <- ifelse(df.ard$outcomen == "stroke", "Stroke",
-                          df.ard$outcomen)
-df.ard$outcomen <- ifelse(df.ard$outcomen == "MI", "Myocardial Infarction",
-                          df.ard$outcomen)
-df.ard$outcomen <- ifelse(df.ard$outcomen == "sustGFRdecl", "Composite Renal Outcome",
-                          df.ard$outcomen)
-df.ard$Class <- ifelse(df.ard$type == "GLP1", "GLP1-RAs", "SGLT2i")
+
+outcomes <- unique(df.ard$outcome)
+df.ard$outcome <- ifelse(df.ard$outcome == "allcauseMort", "All-cause Mortality",
+                          df.ard$outcome)
+df.ard$outcome <- ifelse(df.ard$outcome == "CVMort", "Cardiovascular Mortality",
+                          df.ard$outcome)
+df.ard$outcome <- ifelse(df.ard$outcome == "HospHF", "Hospitalization for Heart Failure",
+                          df.ard$outcome)
+df.ard$outcome <- ifelse(df.ard$outcome == "stroke", "Stroke",
+                          df.ard$outcome)
+df.ard$outcome <- ifelse(df.ard$outcome == "MI", "Myocardial Infarction",
+                          df.ard$outcome)
+df.ard$outcome <- ifelse(df.ard$outcome == "sustGFRdecl", "Composite Renal Outcome",
+                          df.ard$outcome)
+df.ard$Class <- ifelse(df.ard$type == "GLP1", "GLP-1RAs", "SGLT2i")
 
 # Vector of outcomes
-outcomes <- c("All-cause Mortality","Cardiovascular Mortality",  "MACE",
-              "Myocardial Infarction", "Stroke",
-              "Hospitalisation for Heart Failure", "Composite Renal Outcome")
 
+outcomes <- unique(df.ard$outcome)
+
+df.ard <- subset(df.ard, subset = !(df.ard$trialname == "LEADER/SUSTAIN-6"))
 # Meta analysis by outcome/drugclass (ard)
 for(i in 1:length(outcomes)){
+  
+  
   # I: Subset data per outcome/drugclass
-  d.o <- subset(df.ard, subset = (df.ard$outcomen == outcomes[i]))
-  d.g <- subset(d.o, subset = (Class == "GLP1-RAs"))
+  d.o <- subset(df.ard, subset = (df.ard$outcome == outcomes[i]))
+  d.g <- subset(d.o, subset = (Class == "GLP-1RAs"))
   d.s <- subset(d.o, subset = (Class == "SGLT2i"))
   # II. Metagen for each outcome/class
   # II.1  model.g for GLP-1RA  
@@ -76,9 +79,9 @@ for(i in 1:length(outcomes)){
   )
   # Forest plots
   # III.a GLP-1Ra
-  #png(paste0("output/meta_ard_glp1_", outcomes[i],".png"), 
-  #    width = 6, height = 4, units = 'in', res = 300)  
-  forest(model.g, 
+  #png(paste0("_forest/meta_ard_glp1_", outcomes[i],".png"), 
+  #     width = 6, height = 4, units = 'in', res = 300)    
+  forest.meta(model.g, 
          #atransf  = log, 
          overall = T,
          studlab  = TRUE,
@@ -89,26 +92,32 @@ for(i in 1:length(outcomes)){
          ref      = 0,
          level    = 0.95,
          weight.subgroup = "weight",
-         smlab = unique(d.o$outcomen),
-         col.diamond = "plum4",
-         col.square  = "plum3",
+         smlab = "",
+         col.diamond = "plum3",
+         col.square  = "plum4",
          leftcols = c("studlab"),
+         leftlabs = paste0(unique(d.o$outcome), "\nGLP-1RAs"),
          label = T,
          print.Q = T, print.pval.Q = T,
          print.I2 = T,
          print.tau2 = F,
          fs.hetstat = 7,
-         text.addline1 =  "GLP-1RA",
-         subgroup=F
+   #      text.addline1 =  unique(d.o$outcomen),
+         subgroup=F,
+         subgroup.name = "AAA",
+         lab.NA = "",
+         lab.NA.weight = "",
+         lab.NA.effect = ""
   )
-  dev.off()
+  #dev.off()
   # III.b SGLT2i  
-  #png(paste0("output/meta_ard_sglt2_", outcomes[i],".png"), 
+  #png(paste0("_forest/meta_ard_sglt2_", outcomes[i],".png"), 
   #    width = 6, height = 4, units = 'in', res = 300) 
   forest(model.s, 
          #atransf  = log, 
+         main ="a", top = 3,
          overall = T,
-         studlab  = TRUE,
+       #  studlab  = TRUE,
          fontsize = 9,
          xlim     = c(-0.3,0.2)*100,
          at       = c(-0.1,-0.1,0,0.1)*100,
@@ -116,22 +125,19 @@ for(i in 1:length(outcomes)){
          ref      = 0,
          level    = 0.95,
          weight.subgroup = "weight",
-         smlab = unique(d.o$outcomen),
          col.diamond = "plum4",
          col.square  = "plum3",
          leftcols = c("studlab"),
+         leftlabs ="\nSGLT2i",
+         smlab = "",  
          label = T,
          print.Q = T, print.pval.Q = T,
          print.I2 = T,
          print.tau2 = F,
          fs.hetstat = 7,
-         text.addline1 =  "SGLT2i",
+  #       text.addline1 =  unique(d.o$outcomen),
          subgroup=F
   )
-  dev.off()
+  #dev.off()
 }
-
-
-
-
 
