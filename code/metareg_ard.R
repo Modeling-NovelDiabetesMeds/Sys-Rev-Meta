@@ -40,7 +40,7 @@
         meta$outcomelab <- ifelse(meta$outcomen == "CVMort", 
                                   "Cardiovascular Mortality", meta$outcomelab )
         meta$outcomelab <- ifelse(meta$outcomen == "HospHF",
-                                  "Hospitalisation for Heart Failure", 
+                                  "Hospitalization for Heart Failure", 
                                   meta$outcomelab )
         meta$outcomelab <- ifelse(meta$outcomen == "sustGFRdecl", 
                                   "Composite Renal Outcome", meta$outcomelab )
@@ -104,7 +104,7 @@
     lse <- list()
     # Vector of outcomes interest
     v.outcomes <- c("Cardiovascular Mortality", "MACE",
-                    "Hospitalisation for Heart Failure", 
+                    "Hospitalization for Heart Failure", 
                     "Composite Renal Outcome", "All-cause Mortality", 
                     "Myocardial Infarction", "Stroke") 
     # Number of simulations S
@@ -177,7 +177,7 @@
     arddf <- meta[, c("trialname","type", "outcomelab", "ard", "ardse",
                       "ardse2", "ardvi", "ardvi.2")]
 # Export ardse.csv dataframe (used in forest plots)  
-      write.csv(arddf, "data/ardse.csv")
+#      write.csv(arddf, "data/ardse.csv")
 
 # Wsize/ Wsize2: Parameter used for bubble sizes, function proportional of variances
      meta <- meta %>%
@@ -201,7 +201,7 @@ for(o in 1:length(v.outcomes)){ #loop runs over each outcome 'o' and each drug c
     df.0 <- subset(meta, subset = (outcomelab == v.outcomes[o] &
                                    type == v.type[t]))
   
-  if(v.outcomes[o] == "HospHF"){ #leave out two trials with inconsistent definition for HospHF
+  if(v.outcomes[o] == "Hospitalization for Heart Failure"){ #leave out two trials with inconsistent definition for HospHF
     df <- subset(df.0, 
                  subset = (trialname != "SOLOIST-WHF" & trialname != "SCORED") 
                  )
@@ -229,56 +229,34 @@ for(o in 1:length(v.outcomes)){ #loop runs over each outcome 'o' and each drug c
 #primary outcomes
 
     # empty data frame to store
-    cc <- as.data.frame(cbind(rep(v.outcomes[1:4],2), 
-                          c(rep("GLP-1RA",4), 
-                            rep("SGLT2i",4)), 
-                          rep(NA,8), 
-                          rep(NA,8),
-                          rep(NA,8),
-                          rep(NA,8)))
-# secondary outcomes
-    cc.2 <- as.data.frame(cbind(rep(v.outcomes[5:7],2), 
-                              c(rep("GLP-1RA",3), 
-                                rep("SGLT2i",3)), 
-                              rep(NA,6), 
-                              rep(NA,6),
-                              rep(NA,6),
-                              rep(NA,6)))
+    cc <- as.data.frame(cbind(rep(v.outcomes[1:7],2), 
+                          c(rep("GLP-1RA",7), 
+                            rep("SGLT2i",7)), 
+                          rep(NA,14), 
+                          rep(NA,14),
+                          rep(NA,14),
+                          rep(NA,14)))
+
 names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
-names(cc.2) <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
 
     # extract quantities of interest summary lists
       # Primary outcomes
-      for(i in 1:4){
+      for(i in 1:7){
         cc[i,3] <- round(s.g[[i]]$beta[2],3)
         cc[i,4] <- round(s.g[[i]]$ci.lb[2],3)
         cc[i,5] <- round(s.g[[i]]$ci.ub[2],3)
         cc[i,6] <- round(s.g[[i]]$pval[2],3)
-        cc[i+4,3] <- round(s.s[[i]]$beta[2],3)
-        cc[i+4,4] <- round(s.s[[i]]$ci.lb[2],3)
-        cc[i+4,5] <- round(s.s[[i]]$ci.ub[2],3)
-        cc[i+4,6] <- round(s.s[[i]]$pval[2],3)
+        cc[i+7,3] <- round(s.s[[i]]$beta[2],3)
+        cc[i+7,4] <- round(s.s[[i]]$ci.lb[2],3)
+        cc[i+7,5] <- round(s.s[[i]]$ci.ub[2],3)
+        cc[i+7,6] <- round(s.s[[i]]$pval[2],3)
         }
-      # Secondary outcomes
-      for(i in 5:7){
-        cc.2[i-4,3] <- round(s.g[[i]]$beta[2],3)
-        cc.2[i-4,4] <- round(s.g[[i]]$ci.lb[2],3)
-        cc.2[i-4,5] <- round(s.g[[i]]$ci.ub[2],3)
-        cc.2[i-4,6] <- round(s.g[[i]]$pval[2],3)
-        cc.2[i-1,3] <- round(s.s[[i]]$beta[2],3)
-        cc.2[i-1,4] <- round(s.s[[i]]$ci.lb[2],3)
-        cc.2[i-1,5] <- round(s.s[[i]]$ci.ub[2],3)
-        cc.2[i-1,6] <- round(s.s[[i]]$pval[2],3)
-      }
   # Export into text tables
-    stargazer(cc, out = "output/metareg_ard_primary.txt",
+    stargazer(cc, out = "output/metareg_ard.txt",
               summary = F,type = "text", 
-              title = "Meta-regression coefficients for primary outcomes, by drug class",
+              title = "Meta-regression coefficients, by drug class",
               notes = "Absolute risk difference and baseline cardiovascular risk")
-    stargazer(cc.2, out = "output/metareg_ard_secondary.txt",
-              summary = F,type = "text", 
-              title = "Meta-regression coefficients for secondary outcomes, by drug class",
-              notes = "Absolute risk difference and baseline cardiovascular risk")
+
     
 # I.2  Meta regression: Figure ------
     # Colors by drug class 
@@ -304,13 +282,13 @@ names(cc.2) <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
   # Object to title subplots
   v.titles <- c("Cardiovascular Mortality",
                 "MACE", 
-                "Hospitalisation for Heart Failure",
+                "Hospitalization for Heart Failure",
                 "Composite Renal Outcome"
                 )
 
 
 
-  #png("plots/metareg_ard_panel.png", width = 9, height = 9, units = 'in', res = 300)  
+  png("figure.png", width = 9, height = 9, units = 'in', res = 300)  
   par(oma = c(5,3,1,1), mfrow = c(2,2), mar = c(4,4,3,2)*0.75)
   for(i in 1:4){
     # Plot elements: 1. white canvas, 2. confint (sglt2 + glp1) + 
@@ -422,7 +400,7 @@ names(cc.2) <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
     print("hi")
   }
 }
-  #dev.off()  
+  dev.off()  
 
 
 # I.3  Meta regression: Figure for secondary outcomes -----
@@ -888,5 +866,7 @@ msens.s <- rma(100*ard, (100^2)*ardvi.2,
   
     
 #                     End of script               #       
+    
+    
     
     
