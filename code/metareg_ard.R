@@ -255,7 +255,7 @@ names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
     stargazer(cc, out = "output/metareg_ard.txt",
               summary = F,type = "text", 
               title = "Meta-regression coefficients, by drug class",
-              notes = "Absolute risk difference and baseline cardiovascular risk")
+              notes = "Absolute risk difference and baseline cardiovascular mortality rate")
 
     
 # I.2  Meta regression: Figure ------

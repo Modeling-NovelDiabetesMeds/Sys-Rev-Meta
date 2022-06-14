@@ -18,7 +18,7 @@ library(meta)
 # A: Meta analysis and forest plots for log hazard ratios
 
 # Load data ------
-  df <- read.csv("df.csv")
+  df <- read.csv("data/df.csv")
 
 
 
