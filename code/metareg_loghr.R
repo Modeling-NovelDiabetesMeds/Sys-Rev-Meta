@@ -49,7 +49,7 @@ meta$outcomelab <- ifelse(meta$outcomen == "allcauseMort",
 meta$outcomelab <- ifelse(meta$outcomen == "CVMort", 
                           "Cardiovascular mortality", meta$outcomelab )
 meta$outcomelab <- ifelse(meta$outcomen == "HospHF",
-                          "Hospitalisation for Heart Failure", meta$outcomelab )
+                          "Hospitalization for Heart Failure", meta$outcomelab )
 meta$outcomelab <- ifelse(meta$outcomen == "sustGFRdecl", 
                           "Composite renal outcome", meta$outcomelab )
 meta$outcomelab <- ifelse(meta$outcomen == "MACE", 
@@ -83,7 +83,7 @@ xlimm <- range(meta$cvdepy, na.rm =T) + c(-0.5, 0)*sd(meta$cvdepy, na.rm =T)
 meta$lograte <- log(meta$cvdepy) 
 xlimm <- range(meta$lograte, na.rm =T) +   c(-0.5, 0)*sd(meta$lograte, na.rm =T)
 xlimm0 <- range(meta$lograte[meta$type == "GLP1"], na.rm = T) + c(-0.75, 0.75)*sd(meta$lograte[meta$type == "GLP1"], na.rm =T)
-#xlimm0 <- xlimm <- c(0.5,2.5)
+
 # vector of outcome names to run loop
 v.outcome <- unique(meta$outcome)
 v.outcome <- c("allcauseMort", "CVMort", "MACE", "MI", "stroke", "HospHeartFailure", "sustGFRdecl")
@@ -107,8 +107,6 @@ for( i in 1:length(v.outcome)){
   beta <- round(sr$beta[2],4) # slope coefficient
   pp   <- round(sr$pval[2],3) # pvalue 
   
- 
-  
   # Separate analyses by sglt and glp types
   m.g <- mt[mt$type == "GLP1",]
   m.s <- mt[mt$type == "SGLT2",]
@@ -118,8 +116,7 @@ for( i in 1:length(v.outcome)){
             data   = m.g, 
             method ="REML", 
             slab   =trialname
-  )
-  m1 <- lm(m.g$loghr ~ m.g$lograte, weights = (1/m.g$logvi))
+            )
   # summary to recover quantities of interest (coefficient and pvalue)
   sr <- summary(rg)
   coeftab[i,1] <- v.outcome[i]
@@ -130,6 +127,7 @@ for( i in 1:length(v.outcome)){
   coeftab[i,6] <- as.numeric(sr$pval[2])
 
   # Plot
+  logg <- log(seq(0.4, 1.6, 0.2)) # for Y axis jump in a not weird way
   par(oma = c(3,1,1,1), mfrow = c(1,2) )
   regplot(rg, pch = 19, col = m.g$colnum2, bg = "white",label =  "all", labsize = 0.75,
           lcol = c(colfit[3], "gray95", "gray95", "gray95", "gray95"), shade = c("gray97"), 
@@ -137,13 +135,13 @@ for( i in 1:length(v.outcome)){
           cex.axis = 1.0, las = 1,
           psize = m.g$wsize*9,
           xlim = xlimm0,
-          ylim = ylimm
-  )
-  abline(a = rg$beta[1], b = rg$beta[2], col = m.g$colnum2, lty = 1, lwd = 2)
+          ylim = ylimm,
+          atransf = exp, at = logg
+          )
   title(     xlab = "cardiovascular death events per 100 patient-yr, control group",
              ylab = paste0("Log of HR for ", v.outcome[i]),
-             cex.lab = 1.0, line = 2)
-  title(main =  "GLP- 1RAs trials", cex.main = 1.5)
+             cex.lab = 1.0, line = 2.2)
+  title(main =  "GLP- 1RAs trials", cex.main = 1)
   
   
   
@@ -155,7 +153,6 @@ for( i in 1:length(v.outcome)){
             slab =trialname,
             # weights = weights
   )
-  m2 <- lm(m.s$loghr ~m.s$lograte, weights = (1/m.s$logvi))
   # summary to recover quantities of interest (coefficient and pvalue)
   sr <- summary(rs)
   
@@ -166,27 +163,24 @@ for( i in 1:length(v.outcome)){
   coeftab[i+7,5] <- as.numeric(sr$ci.ub[2])
   coeftab[i+7,6] <- as.numeric(sr$pval[2])
   
-  
   regplot(rs, pch = 19, col = m.s$colnum2, bg = "white",label =  "all", labsize = 0.75,
           lcol = c(colfit[2], "gray95", "gray95", "gray95", "gray95"), shade = c("gray97"), 
           xlab = " ", ylab = "",
           cex.axis = 1.0, las = 1,
           psize = m.s$wsize*9,
           xlim = xlimm,
-          ylim = ylimm
+          ylim = ylimm,
+          atransf = exp,
+          axes= F, at = logg
   )
-  abline(a = rs$beta[1], b = rs$beta[2], col = m.s$colnum2, lty = 1, lwd = 2)
+  
   title(     xlab = "cardiovascular death events per 100 patient-yr, control group",
              ylab = paste0("Log of HR for ", v.outcome[i]),
              cex.lab = 1.0, line = 2)
-  #  title(sub =  paste0("Relationship between CVD events per 100 patient-yr ,in the control group  and ", v.outcome[i],"
-  # Solid line shows meta-regression with 95% CI shown as shading. The size of the circles is proportional
-  # to the inverse standard errors. HR = hazard ratio. coefficient = ",beta, " p value = ", pp ),
-  #        cex.sub = 0.57, line =  4)   
-  title(main = "SGLT2i trials", cex.main = 1.5)
+  title(main = "SGLT2i", cex.main = 1)
   
-  title(main = paste0("outcome: ", unique(mt$outcomelab) ),
-        cex.main = 1.8, outer = TRUE)
+  title(main = paste0(unique(mt$outcomelab) ),
+        cex.main = 1.2, outer = TRUE)
 }
 
 
@@ -196,9 +190,14 @@ for( i in 1:length(v.outcome)){
 
  stargazer(coeftab, out = "output/metareg_loghr.txt",
           summary = F,type = "text", 
-          title = "Meta-regression coefficients for log HR and baseline cv incidence rate",
-          notes = "Log hazard ratio and baseline cardiovascular rate")
+          title = "Meta-regression coefficients, by drug class",
+          notes = "Log hazard ratio and baseline cardiovascular mortality rate")
 
 
 
-
+ 
+ 
+ 
+ 
+ 
+ 
