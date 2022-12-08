@@ -96,8 +96,8 @@ for(i in 1:length(outcomes)){
   )
   # III. Forest plot
   # III.a GLP-1Ra
-  # png(paste0("_forest/meta_loghr_glp1_", outcomes[i],".png"), 
-  #    width = 6, height = 4, units = 'in', res = 300)  
+   png(paste0("~/Documents/_meta/_forest/meta_loghr_glp1_", outcomes[i],".png"), 
+      width = 6, height = 4, units = 'in', res = 300)  
   par(mfrow = c(2,2))
   forest(l.mg[[i]], 
          atransf  = log, 
@@ -124,10 +124,10 @@ for(i in 1:length(outcomes)){
          fs.hetstat = 7,
          subgroup=F
          )
-  # dev.off()
+   dev.off()
   # III.b GLP-1Ra    
-  # png(paste0("_forest/meta_loghr_sglt2i_", outcomes[i],".png"), 
-  #     width = 6, height = 4, units = 'in', res = 300)  
+   png(paste0("~/Documents/_meta/_forest/meta_loghr_sglt2i_", outcomes[i],".png"), 
+       width = 6, height = 4, units = 'in', res = 300)  
 
    
 
@@ -155,7 +155,7 @@ for(i in 1:length(outcomes)){
   #      text.addline1 =  "SGLT2i",
          subgroup=F
   )
-  #dev.off()
+  dev.off()
   
 }
 

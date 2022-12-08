@@ -42,8 +42,6 @@ outcomes <- unique(df.ard$outcome)
 df.ard <- subset(df.ard, subset = !(df.ard$trialname == "LEADER/SUSTAIN-6"))
 # Meta analysis by outcome/drugclass (ard)
 for(i in 1:length(outcomes)){
-  
-  
   # I: Subset data per outcome/drugclass
   d.o <- subset(df.ard, subset = (df.ard$outcome == outcomes[i]))
   d.g <- subset(d.o, subset = (Class == "GLP-1RAs"))
@@ -79,8 +77,8 @@ for(i in 1:length(outcomes)){
   )
   # Forest plots
   # III.a GLP-1Ra
-  #png(paste0("_forest/meta_ard_glp1_", outcomes[i],".png"), 
-  #     width = 6, height = 4, units = 'in', res = 300)    
+  png(paste0("~/Documents/_meta/_forest/meta_ard_glp1_", outcomes[i],".png"), 
+       width = 6, height = 4, units = 'in', res = 300)    
   forest.meta(model.g, 
          #atransf  = log, 
          overall = T,
@@ -109,10 +107,10 @@ for(i in 1:length(outcomes)){
          lab.NA.weight = "",
          lab.NA.effect = ""
   )
-  #dev.off()
+  dev.off()
   # III.b SGLT2i  
-  #png(paste0("_forest/meta_ard_sglt2_", outcomes[i],".png"), 
-  #    width = 6, height = 4, units = 'in', res = 300) 
+  png(paste0("~/Documents/_meta/_forest/meta_ard_sglt2_", outcomes[i],".png"), 
+      width = 6, height = 4, units = 'in', res = 300) 
   forest(model.s, 
          #atransf  = log, 
          main ="a", top = 3,
@@ -138,6 +136,6 @@ for(i in 1:length(outcomes)){
   #       text.addline1 =  unique(d.o$outcomen),
          subgroup=F
   )
-  #dev.off()
-}
+  dev.off()
+  }
 

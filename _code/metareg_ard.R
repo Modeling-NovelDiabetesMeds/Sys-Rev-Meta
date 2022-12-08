@@ -21,6 +21,7 @@
 
     set.seed(10029)
     wd <- "~/Documents/Sys-Rev-Meta"
+    
     setwd(wd)
     
     meta <- read.csv("data/df.csv")
@@ -40,6 +41,9 @@
         meta$outcomelab <- ifelse(meta$outcomen == "CVMort", 
                                   "Cardiovascular Mortality", meta$outcomelab )
         meta$outcomelab <- ifelse(meta$outcomen == "HospHF",
+                                  "Hospitalization for Heart Failure", 
+                                  meta$outcomelab )
+        meta$outcomelab <- ifelse(meta$outcomen == "HospHeartFailure",
                                   "Hospitalization for Heart Failure", 
                                   meta$outcomelab )
         meta$outcomelab <- ifelse(meta$outcomen == "sustGFRdecl", 
@@ -177,7 +181,7 @@
     arddf <- meta[, c("trialname","type", "outcomelab", "ard", "ardse",
                       "ardse2", "ardvi", "ardvi.2")]
 # Export ardse.csv dataframe (used in forest plots)  
-#      write.csv(arddf, "data/ardse.csv")
+      write.csv(arddf, "data/ardse.csv")
 
 # Wsize/ Wsize2: Parameter used for bubble sizes, function proportional of variances
      meta <- meta %>%
@@ -252,7 +256,7 @@ names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
         cc[i+7,6] <- round(s.s[[i]]$pval[2],3)
         }
   # Export into text tables
-    stargazer(cc, out = "output/metareg_ard.txt",
+    stargazer(cc, out = "output/metareg_ard_deliver.txt",
               summary = F,type = "text", 
               title = "Meta-regression coefficients, by drug class",
               notes = "Absolute risk difference and baseline cardiovascular mortality rate")
@@ -289,6 +293,7 @@ names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
 
 
   png("figure.png", width = 9, height = 9, units = 'in', res = 300)  
+  dev.off()  
   par(oma = c(5,3,1,1), mfrow = c(2,2), mar = c(4,4,3,2)*0.75)
   for(i in 1:4){
     # Plot elements: 1. white canvas, 2. confint (sglt2 + glp1) + 
@@ -400,7 +405,7 @@ names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
     print("hi")
   }
 }
-  dev.off()  
+  #dev.off()  
 
 
 # I.3  Meta regression: Figure for secondary outcomes -----
