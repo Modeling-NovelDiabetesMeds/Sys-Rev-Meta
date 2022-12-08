@@ -1,5 +1,5 @@
 
-Meta-regression coefficients, by drug class, S5 - History of HF
+Meta-regression coefficients, by drug class, S6 - Inconsistent MACE
 ======================================================================================
                Outcome       Class        Slope       CI.lb       CI.ub      P-value  
 --------------------------------------------------------------------------------------
