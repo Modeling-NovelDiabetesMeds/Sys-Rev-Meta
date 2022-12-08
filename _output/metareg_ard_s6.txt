@@ -1,0 +1,9 @@
+
+Meta-regression coefficients, by drug class, S5 - History of HF
+======================================================================================
+               Outcome       Class        Slope       CI.lb       CI.ub      P-value  
+--------------------------------------------------------------------------------------
+1                MACE       GLP-1RA       0.971      -3.487       5.428       0.67    
+2                MACE        SGLT2i       2.309      -1.344       5.963       0.215   
+--------------------------------------------------------------------------------------
+Absolute risk difference and baseline cardiovascular mortality rate. Sensitivity      

@@ -1,0 +1,9 @@
+
+Meta-regression coefficients, by drug class. S3 -renal outcome variable
+======================================================================================
+                   Outcome           Class      Slope      CI.lb     CI.ub    P-value 
+--------------------------------------------------------------------------------------
+1          Composite Renal Outcome  GLP-1RA     -0.945    -7.429     5.539     0.775  
+2          Composite Renal Outcome   SGLT2i     0.552     -0.062     1.166     0.078  
+--------------------------------------------------------------------------------------
+Absolute risk difference and baseline cardiovascular mortality rate. Sensitivity      
