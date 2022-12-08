@@ -584,7 +584,6 @@ msens.s <- rma(100*ard, (100^2)*ardvi.2,
     l.do.sens <- list()
     v.type <- c("GLP1","SGLT2")
             
-    #png("plots/metareg_ard_cdv_1.png", width = 6, height = 6, units = 'in', res = 300)  
     for(o in 1:length(v.outcomes)){ #loop runs over each outcome 'o' and each drug class 't'
           
       for(t in 1:length(v.type)){
@@ -643,12 +642,12 @@ msens.s <- rma(100*ard, (100^2)*ardvi.2,
         cc.s1
         # Export into text tables
         stargazer(cc.s1, 
-                  out = "~/Documents/_meta/_sensitivity/metareg_ard_s1.txt",
+                  out = "_output/metareg_ard_s1.txt",
                   summary = F,type = "text", 
                   title = "Meta-regression coefficients, by drug class, S1 - SGLTi1/2",
                   notes = "Absolute risk difference and baseline cardiovascular mortality rate. Sensitivity")
         
-      png("~/Documents/_meta/_figures/_revision2/metareg_ard_cdv_1.png", width = 9, height = 9, units = 'in', res = 300) 
+      #png("metareg_ard_cdv_1.png", width = 9, height = 9, units = 'in', res = 300) 
       par(oma = c(2,1,1,1), mfrow = c(2,2), mar = c(5,5,3,2)*0.75)
       for(i in 1:4){
         # Plot elements: 1. white canvas, 2. confint (sglt2 + glp1) + 
@@ -762,7 +761,7 @@ msens.s <- rma(100*ard, (100^2)*ardvi.2,
         }
       }
       
-      dev.off()  
+      #dev.off()  
       
       
 # S.2  Sensitivity Analysis CVD: Remove ELIXA and SOLOIST --------
@@ -847,13 +846,13 @@ msens.s <- rma(100*ard, (100^2)*ardvi.2,
   cc.s2
   # Export into text tables
   stargazer(cc.s2, 
-            out = "~/Documents/_meta/_sensitivity/metareg_ard_s2.txt",
+            out = "_output/metareg_ard_s2.txt",
             summary = F,type = "text", 
             title = "Meta-regression coefficients, by drug class, S2 - accute",
             notes = "Absolute risk difference and baseline cardiovascular mortality rate. Sensitivity")
   
   
-  png("~/Documents/_meta/_figures/_revision2/metareg_ard_cdv_s2.png", width = 9, height = 9, units = 'in', res = 300) 
+  #png("metareg_ard_cdv_s2.png", width = 9, height = 9, units = 'in', res = 300) 
   par(oma = c(2,1,1,1), mfrow = c(2,2), mar = c(5,5,3,2)*0.75)
   for(i in 1:4){
     # Plot elements: 1. white canvas, 2. confint (sglt2 + glp1) + 
@@ -967,30 +966,10 @@ msens.s <- rma(100*ard, (100^2)*ardvi.2,
     }
   }
   
-  dev.off()  
+  #dev.off()  
   
   
 # S.3  Sensitivity Analysis Renal: Remove ELIXA and CREDENCE --------
-  df.sens  <- meta[meta$outcomen == "sustGFRdecl" & 
-                       !(meta$trialname == "ELIXA" |
-                           meta$trialname == "CREDENCE" |
-                           meta$trialname == "DAPA-CKD" |
-                           meta$trialname == "DAPA-HF" |
-                           meta$trialname == "SCORED"|
-                           meta$trialname == "DELIVER"),]
-  
-  msens.g <- rma(100*ard, (100^2)*ardvi.2, 
-                mods = ~ cvdepy, 
-                data = df.sens[df.sens$type == "GLP1",], 
-                method="REML", 
-                slab = trialname)
-  msens.s<- rma(100*ard, (100^2)*ardvi.2, 
-                mods = ~ cvdepy, 
-                data = df.sens[df.sens$type == "SGLT2",], 
-                method="REML", 
-                slab = trialname)
-  
-# S3 =====
     l.do.sens <- list()
     modsens.glp1  <- list() 
     modsens.sglt2 <- list()
@@ -1063,14 +1042,14 @@ msens.s <- rma(100*ard, (100^2)*ardvi.2,
     cc.s3 
     # Export into text tables
     stargazer(cc.s3, 
-              out = "~/Documents/_meta/_sensitivity/metareg_ard_s3.txt",
+              out = "_output/metareg_ard_s3.txt",
               summary = F,type = "text", 
               title = "Meta-regression coefficients, by drug class. S3 -renal outcome variable",
               notes = "Absolute risk difference and baseline cardiovascular mortality rate. Sensitivity")
     
     
 
-    png("~/Documents/_meta/_figures/_revision2/metareg_ard_cdv_s3.png", width = 9, height = 9, units = 'in', res = 300) 
+    #png("metareg_ard_cdv_s3.png", width = 9, height = 9, units = 'in', res = 300) 
     par(oma = c(3,2,0,0), mfrow = c(1,1), mar = c(5,4,3,0)*0.75)
     for(i in 1){
       # Plot elements: 1. white canvas, 2. confint (sglt2 + glp1) + 
@@ -1184,7 +1163,7 @@ msens.s <- rma(100*ard, (100^2)*ardvi.2,
       }
     }
   
-dev.off()    
+#dev.off()    
   
 
 # S4. Sensitivity Analysis: No approval =========
@@ -1253,12 +1232,12 @@ cc.s4 <- cc.s4[ccorder,]
 cc.s4
 # Export into text tables
 stargazer(cc.s4, 
-          out = "~/Documents/_meta/_sensitivity/metareg_ard_s4.txt",
+          out = "_output/metareg_ard_s4.txt",
           summary = F,type = "text", 
           title = "Meta-regression coefficients, by drug class, S4 - FDA approval/ not in market",
           notes = "Absolute risk difference and baseline cardiovascular mortality rate. Sensitivity")
 
-png("~/Documents/_meta/_figures/_revision2/metareg_ard_cdv_s4.png", width = 9, height = 9, units = 'in', res = 300) 
+#png("~/Documents/_meta/_figures/_revision2/metareg_ard_cdv_s4.png", width = 9, height = 9, units = 'in', res = 300) 
 par(oma = c(2,1,1,1), mfrow = c(2,2), mar = c(5,5,3,2)*0.75)
 for(i in 1:4){
   # Plot elements: 1. white canvas, 2. confint (sglt2 + glp1) + 
@@ -1372,7 +1351,7 @@ for(i in 1:4){
   }
 }
 
-dev.off()  
+#dev.off()  
 
 
 # S5. Hist HF =======
@@ -1443,12 +1422,12 @@ cc.s5 <- cc.s5[ccorder,]
 cc.s5
 # Export into text tables
 stargazer(cc.s5, 
-          out = "~/Documents/_meta/_sensitivity/metareg_ard_s5.txt",
+          out = "_output/metareg_ard_s5.txt",
           summary = F,type = "text", 
           title = "Meta-regression coefficients, by drug class, S5 - History of HF",
           notes = "Absolute risk difference and baseline cardiovascular mortality rate. Sensitivity")
 
-png("~/Documents/_meta/_figures/_revision2/metareg_ard_cdv_s5.png", width = 9, height = 9, units = 'in', res = 300) 
+#png("~/Documents/_meta/_figures/_revision2/metareg_ard_cdv_s5.png", width = 9, height = 9, units = 'in', res = 300) 
 par(oma = c(2,1,1,1), mfrow = c(2,2), mar = c(5,5,3,2)*0.75)
 for(i in 1:4){
   # Plot elements: 1. white canvas, 2. confint (sglt2 + glp1) + 
@@ -1563,7 +1542,7 @@ for(i in 1:4){
 }
 
 
-dev.off() 
+#dev.off() 
 
 
 # S.6 MACE w/o Declare ========
@@ -1628,12 +1607,12 @@ for(i in 1){
 
 # Export into text tables
 stargazer(cc.s6, 
-          out = "~/Documents/_meta/_sensitivity/metareg_ard_s6.txt",
+          out = "_output/metareg_ard_s6.txt",
           summary = F,type = "text", 
-          title = "Meta-regression coefficients, by drug class, S5 - History of HF",
+          title = "Meta-regression coefficients, by drug class, S6 - Inconsistent MACE",
           notes = "Absolute risk difference and baseline cardiovascular mortality rate. Sensitivity")
 
-png("~/Documents/_meta/_figures/_revision2/metareg_ard_cdv_s6.png", width = 9, height = 9, units = 'in', res = 300) 
+#png("metareg_ard_cdv_s6.png", width = 9, height = 9, units = 'in', res = 300) 
 par(oma = c(2,1,1,1), mfrow = c(1,1), mar = c(5,5,3,0)*0.75)
 for(i in 1:1){
   # Plot elements: 1. white canvas, 2. confint (sglt2 + glp1) + 
@@ -1747,6 +1726,6 @@ for(i in 1:1){
   }
 }
 
-dev.off() 
+#dev.off() 
 
 
