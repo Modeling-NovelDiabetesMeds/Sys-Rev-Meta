@@ -24,7 +24,7 @@
     
     setwd(wd)
     
-    meta <- read.csv("data/df.csv")
+    meta <- read.csv("_data/df.csv")
 
 # A.   Data preparation (labels and ids for plots) -----
 # generate id per trial/group for regression plots
@@ -56,7 +56,29 @@
                                   "Myocardial Infarction", meta$outcomelab )
         meta$outcomelab <- ifelse(meta$outcomen == "stroke", 
                                   "Stroke", meta$outcomelab )
-
+# Compute rates for EMPA KIDNEY\
+        # Data from primary paper (for HHF or CVdeath)
+        empakidney.hfcvtrate <- 2.04 # rate ratio treatment
+        empakidney.hfcvprate <- 2.37 # rate ratio placebo
+        empakidney.hfcv.n1   <- 131  # nevents  treatment
+        empakidney.hfcv.n0   <- 152  # nevents  placebo
+        # Data of cases only for HF
+        empakidney.hf.n1 <- 88
+        empakidney.hf.n0 <- 107
+        empakidney.mace.n1 <- 200
+        empakidney.mace.n0 <- 213
+        # Compute p.rate and t.rate
+        empakidney.hf.t.rate <- empakidney.hfcvtrate *(empakidney.hf.n1/empakidney.hfcv.n1)
+        empakidney.hf.p.rate <- empakidney.hfcvprate *(empakidney.hf.n0/empakidney.hfcv.n0)
+        # Plug into big dataset
+        meta$t.rate <- ifelse(meta$trialname == "EMPA-KIDNEY" & meta$outcome == "HospHeartFailure",
+                              empakidney.hf.t.rate, 
+                              meta$t.rate
+        )
+        meta$p.rate <- ifelse(meta$trialname == "EMPA-KIDNEY" & meta$outcome == "HospHeartFailure",
+                              empakidney.hf.p.rate, 
+                              meta$p.rate
+                              )
 # B.   Computing variables of interest (loghr)       ----
 # Create CVD baseline rate variable (events per 100 patient year)
 #       cvdepy: cardiovascular death events pero 100 patient-years
@@ -179,9 +201,11 @@
                   all.x = TRUE, 
                   all.y= TRUE)
     arddf <- meta[, c("trialname","type", "outcomelab", "ard", "ardse",
-                      "ardse2", "ardvi", "ardvi.2")]
+                      "ardse2", "ardvi", "ardvi.2", "ordertrial")]
+    #Metaanalysis with no convergence using ardse2 fore deliver, using ardse only for this trial
+    arddf$ardse2 <- ifelse(arddf$trialname == "DELIVER", arddf$ardse, arddf$ardse2)
 # Export ardse.csv dataframe (used in forest plots)  
-      write.csv(arddf, "data/ardse.csv")
+      write.csv(arddf, "_data/ardse.csv")
 
 # Wsize/ Wsize2: Parameter used for bubble sizes, function proportional of variances
      meta <- meta %>%
@@ -256,7 +280,7 @@ names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
         cc[i+7,6] <- round(s.s[[i]]$pval[2],3)
         }
   # Export into text tables
-    stargazer(cc, out = "output/metareg_ard_deliver.txt",
+    stargazer(cc, out = "_output/metareg_ard_deliver.txt",
               summary = F,type = "text", 
               title = "Meta-regression coefficients, by drug class",
               notes = "Absolute risk difference and baseline cardiovascular mortality rate")
@@ -292,8 +316,8 @@ names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
 
 
 
-  png("figure.png", width = 9, height = 9, units = 'in', res = 300)  
-  dev.off()  
+ # png("figure.png", width = 9, height = 9, units = 'in', res = 300)  
+
   par(oma = c(5,3,1,1), mfrow = c(2,2), mar = c(4,4,3,2)*0.75)
   for(i in 1:4){
     # Plot elements: 1. white canvas, 2. confint (sglt2 + glp1) + 
@@ -366,16 +390,16 @@ names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
   # 5. title label per outcome
   title(main = v.titles[i], cex.main = 0.9, line = 0.7)
   # Axes titles
-  if(i  %% 2 != 0){
+ # if(i  %% 2 != 0){
   title(ylab = "Absolute Risk Difference (%)", cex.lab = 0.8, line = 2)
-    } else {
+ #   } else {
       title(ylab = "", cex.lab = 0.6, line = 1)
-    }
-  if(i  >2){
+ #   }
+ # if(i  >2){
   title(xlab = "Cardiovascular Mortality Rate (/100py) in Control Group", cex.lab = 0.8, line = 2)
-   } else {
+ #  } else {
       title(xlab = "", cex.lab = 1, line = 2)
-    }
+  #  }
   # Axes
   axis(1, 
        at = pretty(range(meta$cvdepy, na.rm = T)),
@@ -405,10 +429,10 @@ names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
     print("hi")
   }
 }
-  #dev.off()  
+ #dev.off()  
 
 
-# I.3  Meta regression: Figure for secondary outcomes -----
+## I.3  Meta regression: Figure for secondary outcomes -----
 
   # A list to store data frames per secondary outcome, to run plot over a loop.
   # Data frames contain data points for bubbles (x = cvdepy, y = ard, weight)
@@ -421,8 +445,8 @@ names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
   # Object to title subplots
   v.titles <- v.outcomes[5:7]
   
-  # png("plots/metareg_ard_panel_secondary.png", width = 15, height = 5, units = 'in', res = 300)  
-  par(oma = c(3,2,0,0), mfrow = c(1,3), mar = c(4,4,3,2)*0.5)
+  png("metareg_ard_panel_secondary.png", width = 12, height = 5, units = 'in', res = 300)  
+  par(oma = c(5,3,1,1), mfrow = c(1,3), mar = c(4,4,3,2)*0.75)
     for(i in 5:7){
     # Plot elements: 1. white canvas, 2. confint (sglt2 + glp1) + 
     #                3. bubbles 4. Model fit (line) 5. Trial number (text)
@@ -492,18 +516,18 @@ names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
          y = jitter(100*l.do.2[[i-4]]$ard[!is.na(l.do.2[[i-4]]$ard)],20),  
          l.do.2[[i-4]]$id[!is.na(l.do.2[[i-4]]$ard)], cex = 0.65 )
     # 5. title label per outcome
-    title(main = v.titles[i-4], cex.main = 1.5, line = 0.1)
+    title(main = v.titles[i-4], cex.main = 0.9, line = 0.1)
     # Axes titles
-    if(i  %% 2 != 0){
+#    if(i  %% 2 != 0){
       title(ylab = "Absolute Risk Difference (%)", cex.lab = 0.8, line = 2)
-    } else {
+ #   } else {
       title(ylab = "", cex.lab = 0.6, line = 1)
-    }
-    if(i  >2){
+  #  }
+   # if(i  >2){
       title(xlab = "Cardiovascular Mortality Rate (/100py) in Control Group", cex.lab = 0.8, line = 2)
-    } else {
+    #} else {
       title(xlab = "", cex.lab = 1, line = 2)
-    }
+    #}
     # Axes
     axis(1, 
          at = pretty(range(meta$cvdepy, na.rm = T)),
@@ -533,7 +557,7 @@ names(cc)   <- c("Outcome", "Class", "Slope","CI.lb", "CI.ub", "P-value")
       print("hi")
     }
   }
-  #dev.off() 
+  dev.off() 
 # S.1  Sensitivity Analysis CVD: Remove SCORE and SOLOIST --------
 df.sens  <- meta[meta$outcomen == "CVMort" & 
                      !(meta$trialname == "SOLOIST-WHF" |

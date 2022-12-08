@@ -24,7 +24,7 @@ wd <- "~/Documents/Sys-Rev-Meta"
 setwd(wd)
 
 # read complete meta dataset
-meta <- fread("data/df.csv")
+meta <- fread("_data/df.csv")
 meta <- subset(meta, subset = (outcome != "macroalbuminuria"))
 meta <- subset(meta, subset = (!(meta$outcome == "sustGFRdecl" & 
                                    (meta$trialname == "LEADER" | meta$trialname =="SUSTAIN-6"))))
