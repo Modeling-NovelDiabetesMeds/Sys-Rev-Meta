@@ -3,19 +3,19 @@ Meta-regression coefficients, by drug class, S5 - History of HF
 ======================================================================================
                       Outcome               Class    Slope    CI.lb    CI.ub   P-value
 --------------------------------------------------------------------------------------
-5               All-cause Mortality        GLP-1RA    0.13    -4.381   4.641    0.955 
-1            Cardiovascular Mortality      GLP-1RA   0.782    -3.513   5.078    0.721 
-2                      MACE                GLP-1RA   0.971    -3.487   5.428    0.67  
-6              Myocardial Infarction       GLP-1RA   1.361    -3.291   6.013    0.566 
-7                     Stroke               GLP-1RA   -0.774   -4.68    3.133    0.698 
-3        Hospitalization for Heart Failure GLP-1RA   1.297    -2.504   5.099    0.504 
-4             Composite Renal Outcome      GLP-1RA   -0.945   -7.429   5.539    0.775 
-12              All-cause Mortality         SGLT2i   1.424    -0.447   3.295    0.136 
-8            Cardiovascular Mortality       SGLT2i   1.572    -0.059   3.203    0.059 
-9                      MACE                 SGLT2i   1.882    -0.11    3.874    0.064 
-13             Myocardial Infarction        SGLT2i   -0.15    -2.785   2.485    0.911 
-14                    Stroke                SGLT2i   -0.081   -2.906   2.745    0.955 
-10       Hospitalization for Heart Failure  SGLT2i   1.671     0.51    2.832    0.005 
-11            Composite Renal Outcome       SGLT2i   1.736    -1.016   4.488    0.216 
+5               All-cause Mortality        GLP-1RA   -0.13    -4.62     4.36    0.96  
+1            Cardiovascular Mortality      GLP-1RA   -0.78    -5.08     3.51    0.72  
+2                      MACE                GLP-1RA   -0.97    -5.43     3.49    0.67  
+6              Myocardial Infarction       GLP-1RA   -1.36    -6.02     3.31    0.57  
+7                     Stroke               GLP-1RA    0.78    -3.13     4.68     0.7  
+3        Hospitalization for Heart Failure GLP-1RA   -1.55    -5.28     2.18    0.42  
+4             Composite Renal Outcome      GLP-1RA    0.93    -5.57     7.44    0.78  
+12              All-cause Mortality         SGLT2i   -1.43     -3.3     0.45    0.14  
+8            Cardiovascular Mortality       SGLT2i   -1.57     -3.2     0.06    0.06  
+9                      MACE                 SGLT2i   -1.88    -3.87     0.11    0.06  
+13             Myocardial Infarction        SGLT2i    0.15    -2.49     2.78    0.91  
+14                    Stroke                SGLT2i    0.08    -2.75     2.91    0.96  
+10       Hospitalization for Heart Failure  SGLT2i   -1.33    -2.56    -0.09    0.04  
+11            Composite Renal Outcome       SGLT2i   -1.74    -4.49     1.01    0.21  
 --------------------------------------------------------------------------------------
 Absolute risk difference and baseline cardiovascular mortality rate. Sensitivity      
