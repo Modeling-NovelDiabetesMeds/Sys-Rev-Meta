@@ -1,0 +1,76 @@
+class,trialname,outcome,unit,dmeasure,time,diff,diff.se
+GLP1,AMPLITUDE-O,bodyweight,kg,DCS,DOT,-2.59,0.12
+GLP1,AMPLITUDE-O,hba1c,%,DCS,DOT,-1.23,0.15952951
+GLP1,AMPLITUDE-O,sbp,mmHg,DCS,DOT,-1.48,0.28
+SGLT2i,CANVAS program,bodyweight,kg,DFU,12 months,-2.044,NA
+SGLT2i,CANVAS program,hba1c,%,DFU,12 months,-0.58,
+SGLT2i,CANVAS program,hematocrit,%,DFU,12 months,2.48,0.05612245
+SGLT2i,CANVAS program,sbp,mmHg,DFU,12 months,-4.5955882,0.33440369
+SGLT2i,CANVAS program,uacr,mg/g,DFU,12 months,-3.7056,0.592
+SGLT2i,CREDENCE,bodyweight,kg,DFU,12 months,-1.788487,0.02
+SGLT2i,CREDENCE,hba1c,%,DCS,12 months,-0.1922,0.0174
+SGLT2i,CREDENCE,hematocrit,%,DCS,12 months,2.448398577,0.127110071
+SGLT2i,CREDENCE,sbp,mmHg,DFU,12 months,-3.24,0.147
+SGLT2i,CREDENCE,uacr,mg/g,DCS,12 months,-301.525941,33.65854957
+SGLT2i,DAPA-CKD,hba1c,%,DFU,12 months,-0.121539001,
+SGLT2i,DAPA-HF,bodyweight,kg,DCS,8 months,-0.87,0.125
+SGLT2i,DAPA-HF,hba1c,%,DCS,8 months,-0.24,0.05357143
+SGLT2i,DAPA-HF,hematocrit,%,DFU,8 months,2.93817,0.17295677
+SGLT2i,DAPA-HF,sbp,mmHg,DCS,8 months,-1.27,0.41836735
+SGLT2i,DECLARE-TIMI 58,bodyweight,kg,DFU,12 months,-1.787,0.31875788
+SGLT2i,DECLARE-TIMI 58,hba1c,%,DFU,12 months,-0.551,0.08385005
+SGLT2i,DECLARE-TIMI 58,hematocrit,%,DCS,12 months,2.43478261,0.06274239
+SGLT2i,DECLARE-TIMI 58,sbp,mmHg,DFU,12 months,-2.911,0.084
+SGLT2i,DECLARE-TIMI 58,uacr,mg/g,DFU,12 months,-2.911,0.084
+GLP1,ELIXA,bodyweight,kg,DFU,12 months,-0.51,0.089
+GLP1,ELIXA,hba1c,%,DFU,12 months,-0.202,0.16630846
+GLP1,ELIXA,sbp,mmHg,DFU,12 months,-1.621,0.315
+GLP1,ELIXA,uacr,mg/g,DFU,24 weeks,-2.7383955,0.364
+SGLT2i,EMPA-KIDNEY,bodyweight,kg,DCS,DOT,-0.9,0.1
+SGLT2i,EMPA-KIDNEY,hba1c,%,DCS,DOT,-0.39,0.19
+SGLT2i,EMPA-KIDNEY,hematocrit,%,DCS,DOT,2.2,0.2
+SGLT2i,EMPA-KIDNEY,sbp,mmHg,DCS,DOT,-2.6,0.3
+SGLT2i,EMPA-KIDNEY,uacr,mg/g,DCS,DOT,-48,6.403
+SGLT2i,EMPA-REG OUTCOME,bodyweight,kg,DFU,52 weeks,-1.944729136,0.087335159
+SGLT2i,EMPA-REG OUTCOME,hba1c,%,DFU,52 weeks,-0.4871795,0.032
+SGLT2i,EMPA-REG OUTCOME,hematocrit,%,DFU,52 weeks,2.70737826,0.0461734
+SGLT2i,EMPA-REG OUTCOME,sbp,mmHg,DFU,52 weeks,-3.261,0.63796903
+SGLT2i,EMPEROR-Preserved,bodyweight,kg,DCS,52 weeks,-1.28,0.130102041
+SGLT2i,EMPEROR-Preserved,hba1c,%,DCS,52 weeks,-0.19,0.028061224
+SGLT2i,EMPEROR-Preserved,hematocrit,%,DCS,52 weeks,2.36,0.045918367
+SGLT2i,EMPEROR-Preserved,sbp,mmHg,DCS,52 weeks,-1.2,0.459183674
+SGLT2i,EMPEROR-Reduced,bodyweight,kg,DCS,12 months,-0.854323963,0.127771506
+SGLT2i,EMPEROR-Reduced,hba1c,%,DCS,12 months,-0.089788986,0.024811506
+SGLT2i,EMPEROR-Reduced,sbp,mmHg,DCS,12 months,-0.7,0.56122449
+GLP1,EXSCEL,bodyweight,kg,DFU,1 year,-1.29,
+GLP1,EXSCEL,hba1c,%,DFU,1 year,-0.528,
+GLP1,EXSCEL,sbp,mmHg,DFU,1 year,-2.07,
+GLP1,FREEDOM-CVO,bodyweight,kg,DFU,9 months,-2.532,0.226
+GLP1,FREEDOM-CVO,hba1c,%,DFU,9 months,-0.9199111,0.13928161
+GLP1,Harmony Outcomes,bodyweight,kg,DFU,1 year,-1.05,0.43
+GLP1,Harmony Outcomes,hba1c,%,DFU,1 year,-0.555,0.07653904
+GLP1,Harmony Outcomes,sbp,mmHg,DFU,1 year,0.359,0.38
+GLP1,LEADER,bodyweight,kg,DFU,12 months,-2.502,
+GLP1,LEADER,hba1c,%,DFU,12 months,-0.717,
+GLP1,LEADER,sbp,mmHg,DFU,12 months,-1.9545455,
+GLP1,LEADER,uacr,mg/g,DFU,12 months,-5.4337662,0.62699164
+GLP1,PIONEER 6,bodyweight,kg,DFU,50 weeks,-2.675,0.4
+GLP1,PIONEER 6,hba1c,%,DFU,50 weeks,-0.719,0.12549893
+GLP1,PIONEER 6,sbp,mmHg,DCS,DOT,-2.6,NA
+GLP1,REWIND,bodyweight,kg,DCS,12 months,-1.46,0.113137085
+GLP1,REWIND,hba1c,%,DCS,12 months,-0.62,0.141421356
+GLP1,REWIND,hematocrit,uacr,DCS,52 weeks,0.86,
+GLP1,REWIND,sbp,mmHg,DCS,12 months,-1.71,0.13
+GLP1,REWIND,uacr,mg/g,DFU,1 year,-2.571456539,0.388833734
+SGLT2i,SCORED,bodyweight,kg,DCS,DOT,-1.16,0.05102041
+SGLT2i,SCORED,hba1c,%,DCS,DOT,-0.42,0.02295918
+SGLT2i,SCORED,sbp,mmHg,DCS,DOT,-2.44,0.20408163
+GLP1,SUSTAIN-6,bodyweight,kg,DFU,44 weeks,-3.832487,0.37235004
+GLP1,SUSTAIN-6,hba1c,%,DFU,44 weeks,-1.01117586,0.080829824
+GLP1,SUSTAIN-6,sbp,mmHg,DFU,44 weeks,-2.9264686,0.5
+GLP1,SUSTAIN-6,uacr,mg/g,DFU,12 months,-8.903508772,0.59373875
+SGLT2i,VERTIS CV,bodyweight,kg,DCS,12 months,-2.626012651,0.074469509
+SGLT2i,VERTIS CV,hba1c,%,DCS,12 months,-0.5043478,0.01411704
+SGLT2i,VERTIS CV,hematocrit,%,DCS,52 weeks,2.69,0.096938776
+SGLT2i,VERTIS CV,sbp,mmHg,DCS,12 months,-2.8424969,0.53644696
+SGLT2i,DELIVER,sbp,mmHg,DCS,12 months,-1.11627907,0.482441588
