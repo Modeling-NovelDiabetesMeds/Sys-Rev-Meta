@@ -1,0 +1,21 @@
+
+Meta-regression coefficients, by drug class
+=========================================================================
+                 Outcome               Class  Slope  CI.lb  CI.ub P-value
+-------------------------------------------------------------------------
+5          All-cause Mortality        GLP-1RA 0.126  -4.364 4.617  0.956 
+1       Cardiovascular Mortality      GLP-1RA 0.782  -3.513 5.078  0.721 
+2                 MACE                GLP-1RA 0.971  -3.487 5.428  0.67  
+6         Myocardial Infarction       GLP-1RA 1.357  -3.308 6.022  0.569 
+7                Stroke               GLP-1RA -0.776 -4.681 3.129  0.697 
+3   Hospitalization for Heart Failure GLP-1RA 1.548  -2.183 5.279  0.416 
+4        Composite Renal Outcome      GLP-1RA -0.935 -7.437 5.568  0.778 
+12         All-cause Mortality        SGLT2i  0.378  -0.075 0.831  0.102 
+8       Cardiovascular Mortality      SGLT2i  0.496  -0.009 1.001  0.054 
+9                 MACE                SGLT2i  1.882  -0.11  3.874  0.064 
+13        Myocardial Infarction       SGLT2i  -0.149 -2.783 2.486  0.912 
+14               Stroke               SGLT2i  -0.079 -2.907 2.749  0.956 
+10  Hospitalization for Heart Failure SGLT2i  1.444  1.047  1.842    0   
+11       Composite Renal Outcome      SGLT2i  0.306  -0.358 0.971  0.366 
+-------------------------------------------------------------------------
+Absolute risk difference and baseline cardiovascular mortality rate      

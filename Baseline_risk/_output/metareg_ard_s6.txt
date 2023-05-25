@@ -1,0 +1,9 @@
+
+Meta-regression coefficients, by drug class, S6 - Inconsistent MACE
+======================================================================================
+               Outcome       Class        Slope       CI.lb       CI.ub      P-value  
+--------------------------------------------------------------------------------------
+1                MACE       GLP-1RA       -0.97       -5.43       3.49        0.67    
+2                MACE        SGLT2i       -2.31       -5.96       1.34        0.22    
+--------------------------------------------------------------------------------------
+Absolute risk difference and baseline cardiovascular mortality rate. Sensitivity      
