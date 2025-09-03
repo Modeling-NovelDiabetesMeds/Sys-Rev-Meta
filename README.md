@@ -12,3 +12,7 @@ The findings from our meta-analyses inform drug effect estimates for microsimula
 
 ### Reference
 1.	Ferket BS, Hunink MG, Masharani U, Max W, Burke GL, Fleischmann KE. Lifetime cardiovascular disease risks by coronary artery calcium scores in individuals with and without diabetes mellitus: an analysis from the Multi-Ethnic Study of Atherosclerosis. Diabetes Care. 2022 Feb 15:dc211607. doi: 10.2337/dc21-1607.
+  
+2.	Rodriguez-Valadez JM, Ibrahim M, Fleischmann KE, Masharani U, Yeboah J, Park M, Li L, Weber E, Li Y, Berkalieva A, Max W, Hunink MGM, Ferket BS. Cardiovascular and Renal Benefits of Novel Diabetes Drugs by Baseline Cardiovascular Risk: A Systematic Review, Meta-Analysis, and Meta-Regression. Diabetes Care. 2023 Jun 1;46(6):1300-1310. doi: 10.2337/dc22-0772.
+  
+3.	Rodriguez-Valadez JM, Tahsin M, Masharani U, Park M, Hunink MG, Yeboah J, Li L, Weber E, Berkalieva A, Avezaat L, Max W, Fleischmann KE, Ferket BS. Potential mediators for treatment effects of novel diabetes medications on cardiovascular and renal outcomes: a meta-regression analysis. J Am Heart Assoc. 2024 Feb 20;13(4):e032463. doi: 10.1161/JAHA.123.032463.
