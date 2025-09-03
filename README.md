@@ -19,5 +19,3 @@ The findings from our meta-analyses inform drug effect estimates for microsimula
 ### Acknowledgments
 
 Research reported in this repository was supported by the National Heart, Lung, And Blood Institute (NHLBI) of the National Institutes of Health under award number: R01HL153456. The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health.
-
-This work has not been peer-reviewed. The authors have no competing interests to declare.
