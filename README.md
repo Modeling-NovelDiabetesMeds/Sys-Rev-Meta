@@ -14,3 +14,10 @@ The findings from our meta-analyses inform drug effect estimates for microsimula
 1.	Rodriguez-Valadez JM, Ibrahim M, Fleischmann KE, Masharani U, Yeboah J, Park M, Li L, Weber E, Li Y, Berkalieva A, Max W, Hunink MGM, Ferket BS. Cardiovascular and Renal Benefits of Novel Diabetes Drugs by Baseline Cardiovascular Risk: A Systematic Review, Meta-Analysis, and Meta-Regression. Diabetes Care. 2023 Jun 1;46(6):1300-1310. doi: 10.2337/dc22-0772.
   
 2.	Rodriguez-Valadez JM, Tahsin M, Masharani U, Park M, Hunink MG, Yeboah J, Li L, Weber E, Berkalieva A, Avezaat L, Max W, Fleischmann KE, Ferket BS. Potential mediators for treatment effects of novel diabetes medications on cardiovascular and renal outcomes: a meta-regression analysis. J Am Heart Assoc. 2024 Feb 20;13(4):e032463. doi: 10.1161/JAHA.123.032463.
+
+
+### Acknowledgments
+
+Research reported in this repository was supported by the National Heart, Lung, And Blood Institute (NHLBI) of the National Institutes of Health under award number: R01HL153456. The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health.
+
+This work has not been peer-reviewed. The authors have no competing interests to declare.
